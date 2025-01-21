@@ -6,43 +6,142 @@ $result = $conn->query($sql);
 
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kamar Tersedia</title>
-    <link rel="stylesheet" href="css/style_index.css">
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Kamar Tersedia</title>
+        <style>
+            /* Reset */
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+            }
+
+            /* Navbar */
+            .navbar {
+                background-color: #007bff;
+                color: white;
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 20px;
+                align-items: center;
+            }
+
+            .navbar .logo {
+                font-size: 1.5em;
+                font-weight: bold;
+                color: white;
+                text-decoration: none;
+            }
+
+            .nav-links {
+                list-style: none;
+                display: flex;
+                gap: 15px;
+                margin: 0;
+                padding: 0;
+            }
+
+            .nav-links a {
+                color: white;
+                text-decoration: none;
+                font-size: 1em;
+                padding: 5px 10px;
+                transition: background 0.3s ease;
+            }
+
+            .nav-links a:hover {
+                background-color: #0056b3;
+                border-radius: 5px;
+            }
+
+            /* Container */
+            .container {
+                margin: 20px auto;
+                max-width: 900px;
+                padding: 20px;
+                text-align: center;
+            }
+
+            h1 {
+                color: #007bff;
+                margin-bottom: 20px;
+            }
+
+            /* Kamar List */
+            .kamar-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+
+            .kamar {
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                padding: 15px;
+                text-align: left;
+            }
+
+            .kamar h2 {
+                font-size: 1.2em;
+                margin-bottom: 10px;
+            }
+
+            .kamar p {
+                margin: 5px 0;
+            }
+
+            .btn {
+                display: inline-block;
+                background-color: #28a745;
+                color: white;
+                text-decoration: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                font-size: 0.9em;
+                transition: background 0.3s ease;
+            }
+
+            .btn:hover {
+                background-color: #218838;
+            }
+
+            .no-data {
+                font-size: 1.1em;
+                color: #888;
+            }
+        </style>
+    </head>
+    <body>
+            <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar">
             <a href="index.php" class="logo">Cluckin' Bell Hotel</a>
             <ul class="nav-links">
                 <li><a href="index.php">Home</a></li>
                 <li><a href="login.php" class="btn-login">Login</a></li>
             </ul>
+        </nav>
+
+        <!-- Konten -->
+            <h1>Daftar Kamar Tersedia</h1>
+            <?php if ($result->num_rows > 0): ?>
+                <div class="kamar-list">
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <div class="kamar">
+                            <h2>Kamar Nomor: <?= htmlspecialchars($row['nomor_kamar']) ?></h2>
+                            <p><strong>Tipe:</strong> <?= htmlspecialchars($row['tipe']) ?></p>
+                            <p><strong>Harga:</strong> Rp<?= number_format($row['harga'], 0, ',', '.') ?></p>
+                            <p><strong>Deskripsi:</strong> <?= htmlspecialchars($row['deskripsi']) ?></p>
+                            <a href="form_reservasi.php?id=<?= $row['id'] ?>" class="btn">Pesan Sekarang</a>
+                        </div>
+                    <?php endwhile; ?>
+                </div>
+            <?php else: ?>
+                <p class="no-data">Tidak ada kamar tersedia saat ini.</p>
+            <?php endif; ?>
         </div>
-    </nav>
-
-    <div class="container">
-        <h1>Daftar Kamar Tersedia</h1>
-        <?php if ($result->num_rows > 0): ?>
-            <div class="kamar-list">
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <div class="kamar">
-                        <h2>Kamar Nomor: <?= htmlspecialchars($row['nomor_kamar']) ?></h2>
-                        <p><strong>Tipe:</strong> <?= htmlspecialchars($row['tipe']) ?></p>
-                        <p><strong>Harga:</strong> Rp<?= number_format($row['harga'], 2, ',', '.') ?></p>
-                        <p><strong>Deskripsi:</strong> <?= htmlspecialchars($row['deskripsi']) ?></p>
-                        <a href="reservasi.php?id=<?= $row['id'] ?>" class="btn">Pesan Sekarang</a>
-                    </div>
-                <?php endwhile; ?>
-            </div>
-        <?php else: ?>
-            <p>Tidak ada kamar tersedia saat ini.</p>
-        <?php endif; ?>
-    </div>
-</body>
+    </body>
 </html>
-
 <?php $conn->close(); ?>
