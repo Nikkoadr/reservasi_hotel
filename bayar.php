@@ -2,26 +2,23 @@
 session_start();
 include 'koneksi.php';
 
-// Cek jika user belum login
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
 }
 
-// Ambil ID Pembayaran dari URL
 if (isset($_GET['id_pembayaran'])) {
     $id_pembayaran = $_GET['id_pembayaran'];
 
-    // Ambil informasi pembayaran dari database
-    $query = mysqli_query($conn, "SELECT p.*, r.tanggal_check_in, r.tanggal_check_out 
-                                  FROM pembayaran p 
-                                  INNER JOIN reservasi r ON p.id_reservasi = r.id 
-                                  WHERE p.id = $id_pembayaran AND p.status = 'belum dibayar'");
+    $query = mysqli_query($conn, "SELECT pembayaran.*, reservasi.tanggal_check_in, reservasi.tanggal_check_out, reservasi.id_kamar
+                                  FROM pembayaran 
+                                  INNER JOIN reservasi ON pembayaran.id_reservasi = reservasi.id 
+                                  WHERE pembayaran.id = $id_pembayaran 
+                                  AND pembayaran.status = 'belum dibayar'");
 
     $pembayaran = mysqli_fetch_assoc($query);
 
     if (!$pembayaran) {
-        // Pembayaran tidak ditemukan atau sudah dibayar
         echo "Pembayaran tidak valid atau sudah dibayar.";
         exit;
     }
@@ -30,29 +27,28 @@ if (isset($_GET['id_pembayaran'])) {
     exit;
 }
 
-// Jika tombol bayar ditekan
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $bank_tujuan = $_POST['bank_tujuan'];
-    $bukti_transfer = $_FILES['bukti_transfer'];
+    $bukti_pembayaran = $_FILES['bukti_pembayaran'];
 
-    // Cek apakah file upload sudah ada
-    if ($bukti_transfer['error'] == 0) {
-        // Tentukan lokasi upload file
-        $upload_dir = 'uploads/bukti_transfer/';
-        $file_name = time() . '_' . basename($bukti_transfer['name']);
+    if ($bukti_pembayaran['error'] == 0) {
+        $upload_dir = 'assets/bukti_pembayaran/';
+        $file_name = time() . '_' . basename($bukti_pembayaran['name']);
         $upload_path = $upload_dir . $file_name;
 
-        // Pindahkan file yang di-upload ke direktori tujuan
-        if (move_uploaded_file($bukti_transfer['tmp_name'], $upload_path)) {
-            // Simpan informasi bukti transfer di database
+        if (move_uploaded_file($bukti_pembayaran['tmp_name'], $upload_path)) {
             $update_query = "UPDATE pembayaran 
                             SET status = 'pending',
-                                bukti_transfer = '$file_name' 
+                                bukti_pembayaran = '$file_name' 
                             WHERE id = $id_pembayaran";
             mysqli_query($conn, $update_query);
 
-            // Redirect ke halaman sukses pembayaran
-            header("Location: sukses_pembayaran.php");
+            $id_kamar = $pembayaran['id_kamar'];
+            $update_kamar_query = "UPDATE kamar 
+                                SET status = 'terpesan' 
+                                WHERE id = $id_kamar";
+            mysqli_query($conn, $update_kamar_query);
+
+            header("Location: dashboard.php");
             exit;
         } else {
             $error_message = "Gagal mengunggah bukti transfer!";
@@ -127,8 +123,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="bank_tujuan">Transfer Ke BRI: 123-456-789-098-321 A/N Cluckin' Bell Hotel</label>
         <br><br>
 
-        <label for="bukti_transfer">Unggah Bukti Transfer: </label>
-        <input type="file" name="bukti_transfer" id="bukti_transfer" accept="image/*" required>
+        <label for="bukti_pembayaran">Unggah Bukti Pembayaran: </label>
+        <input type="file" name="bukti_pembayaran" id="bukti_pembayaran" accept="image/*" required>
         <br><br>
 
         <button type="submit" class="btn">Kirim bukti Transfer</button>

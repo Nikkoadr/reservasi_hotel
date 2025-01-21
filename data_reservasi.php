@@ -1,3 +1,18 @@
+<?php
+session_start();
+include 'koneksi.php';
+
+// Cek jika user belum login
+if (!isset($_SESSION['id_user'])) {
+    header("Location: login.php");
+    exit;
+}
+
+// Ambil informasi pengguna dari session
+$id_user = $_SESSION['id_user'];
+$nama = $_SESSION['nama'];
+$role = $_SESSION['role'];
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -154,7 +169,7 @@ $result_reservasi = $conn->query($sql_reservasi);
                                 <td><?= htmlspecialchars($row['tanggal_check_out']) ?></td>
                                 <td>Rp<?= number_format($row['total_pembayaran'], 2, ',', '.') ?></td>
                                 <td>
-                                    <?php if ($row['status'] == 'aktif'): ?>
+                                    <?php if ($row['status'] == 'booked'): ?>
                                         <span class="badge badge-success"><?= htmlspecialchars($row['status']) ?></span>
                                     <?php else: ?>
                                         <span class="badge badge-danger"><?= htmlspecialchars($row['status']) ?></span>

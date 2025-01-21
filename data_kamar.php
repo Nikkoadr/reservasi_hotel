@@ -1,3 +1,18 @@
+<?php
+session_start();
+include 'koneksi.php';
+
+// Cek jika user belum login
+if (!isset($_SESSION['id_user'])) {
+    header("Location: login.php");
+    exit;
+}
+
+// Ambil informasi pengguna dari session
+$id_user = $_SESSION['id_user'];
+$nama = $_SESSION['nama'];
+$role = $_SESSION['role'];
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -157,6 +172,7 @@ body {
                         <th>Nomor Kamar</th>
                         <th>Tipe</th>
                         <th>Harga</th>
+                        <th>Deskripsi</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -174,6 +190,7 @@ body {
                                 <td><?= htmlspecialchars($row['nomor_kamar']) ?></td>
                                 <td><?= htmlspecialchars($row['tipe']) ?></td>
                                 <td>Rp<?= number_format($row['harga'], 2, ',', '.') ?></td>
+                                <td><?= htmlspecialchars($row['deskripsi']) ?></td>
                                 <td>
                                     <?php if ($row['status'] == 'tersedia'): ?>
                                         <span class="badge badge-success"><?= htmlspecialchars($row['status']) ?></span>

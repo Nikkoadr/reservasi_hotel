@@ -13,17 +13,19 @@ $id_user = $_SESSION['id_user'];
 $nama = $_SESSION['nama'];
 $role = $_SESSION['role']; // Role pengguna: admin, resepsionis, atau tamu
 
-// Jika role adalah tamu, periksa status pembayaran
 if ($role === 'tamu') {
     $query_pembayaran = mysqli_query($conn, "
-        SELECT p.*, r.tanggal_check_in, r.tanggal_check_out 
+        SELECT p.id, p.id_reservasi, p.jumlah, p.status, 
+               r.tanggal_check_in, r.tanggal_check_out 
         FROM pembayaran p 
         INNER JOIN reservasi r ON p.id_reservasi = r.id 
-        WHERE r.id_user = $id_user AND p.status = 'belum dibayar'
+        WHERE r.id_user = $id_user 
+        AND p.status IN ('belum dibayar', 'pending', 'sukses')
         LIMIT 1
     ");
     $pembayaran = mysqli_fetch_assoc($query_pembayaran);
 }
+
 
 ?>
 
@@ -120,22 +122,27 @@ if ($role === 'tamu') {
     <?php include 'navbar.php'; ?>
     
         <h1>Selamat Datang, <?= htmlspecialchars($nama) ?></h1>
-        <p>Anda login sebagai: <strong><?= htmlspecialchars($role) ?></strong></p>
 
         <?php if ($role === 'tamu' && $pembayaran): ?>
-            <div class="alert">
-                Anda memiliki pembayaran yang belum diselesaikan.
-            </div>
-            <p><strong>Detail Pembayaran:</strong></p>
-            <ul>
-                <li>Check-in: <?= $pembayaran['tanggal_check_in'] ?></li>
-                <li>Check-out: <?= $pembayaran['tanggal_check_out'] ?></li>
-                <li>Jumlah yang harus dibayar: Rp<?= number_format($pembayaran['jumlah'], 0, ',', '.') ?></li>
-            </ul>
-            <a href="bayar.php?id_pembayaran=<?= $pembayaran['id'] ?>" class="btn">Lakukan Pembayaran</a>
+            <?php if ($pembayaran['status'] === 'belum dibayar'): ?>
+                <div class="alert">
+                    Anda memiliki pembayaran yang belum diselesaikan.
+                </div>
+                <p><strong>Detail Pembayaran:</strong></p>
+                <ul>
+                    <li>Check-in: <?= $pembayaran['tanggal_check_in'] ?></li>
+                    <li>Check-out: <?= $pembayaran['tanggal_check_out'] ?></li>
+                    <li>Jumlah yang harus dibayar: Rp<?= number_format($pembayaran['jumlah'], 0, ',', '.') ?></li>
+                </ul>
+                <a href="bayar.php?id_pembayaran=<?= $pembayaran['id'] ?>" class="btn">Lakukan Pembayaran</a>
+
+            <?php elseif ($pembayaran['status'] === 'pending' || $pembayaran['status'] === 'sukses'): ?>
+                <p>Pembayaran Anda sedang dalam proses atau telah selesai.</p>
+                <a href="invoice.php?id_reservasi=<?= $pembayaran['id_reservasi'] ?>" class="btn">Print Invoice</a>
+            <?php endif; ?>
+
         <?php elseif ($role === 'tamu'): ?>
-            <p>Tidak ada pembayaran yang harus diselesaikan.</p>
-            <a href="invoice.php" class="btn">Print Invoice</a>
+            <p>Tidak ada pembayaran yang perlu dilakukan.</p>
         <?php endif; ?>
     </div>
 </body>

@@ -1,3 +1,18 @@
+<?php
+session_start();
+include 'koneksi.php';
+
+// Cek jika user belum login
+if (!isset($_SESSION['id_user'])) {
+    header("Location: login.php");
+    exit;
+}
+
+// Ambil informasi pengguna dari session
+$id_user = $_SESSION['id_user'];
+$nama = $_SESSION['nama'];
+$role = $_SESSION['role'];
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
