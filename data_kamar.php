@@ -28,43 +28,55 @@ body {
 
 /* Navbar */
 .navbar {
-  background-color: #007bff;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 20px;
-  align-items: center;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
 }
 
-.navbar .navbar-brand {
-  font-size: 1.5em;
-  font-weight: bold;
+.navbar-brand a {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
 }
 
 .navbar-links {
-  list-style: none;
-  display: flex;
-  gap: 15px;
-  margin: 0;
-  padding: 0;
-}
-
-.navbar-links li {
-  display: inline;
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
 }
 
 .navbar-links a {
-  color: white;
-  text-decoration: none;
-  font-size: 1em;
-  padding: 5px 10px;
-  transition: background 0.3s ease;
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.navbar-links a:hover,
-.navbar-links .logout-btn {
-  background-color: #0056b3;
-  border-radius: 5px;
+.navbar-links a.active {
+    background-color: #0056b3;
+}
+
+.navbar-links a:hover {
+    background-color: #0056b3;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+.logout-btn:hover {
+    background-color: #a71d2a;
 }
 
 /* Container */
@@ -165,6 +177,7 @@ body {
         ?>
         <div class="content">
             <h1>Data Kamar</h1>
+            <a href="tambah_kamar.php" class="btn btn-edit">Tambah Kamar</a>
             <table class="table">
                 <thead>
                     <tr>
