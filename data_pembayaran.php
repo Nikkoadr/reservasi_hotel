@@ -12,6 +12,9 @@ if (!isset($_SESSION['id_user'])) {
 $id_user = $_SESSION['id_user'];
 $nama = $_SESSION['nama'];
 $role = $_SESSION['role'];
+
+// Cek jika user adalah admin
+$is_admin = ($role == 'admin');
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -123,6 +126,29 @@ $role = $_SESSION['role'];
         .badge-danger {
             background-color: #dc3545;
         }
+
+        .badge-warning {
+            background-color: rgb(218, 204, 22);
+        }
+
+        /* Image styling */
+        .bukti-img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        /* Button styling */
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -142,6 +168,10 @@ $role = $_SESSION['role'];
                         <th>Tanggal Pembayaran</th>
                         <th>Jumlah Pembayaran</th>
                         <th>Status Pembayaran</th>
+                        <th>Bukti Pembayaran</th>
+                        <?php if ($is_admin): ?>
+                            <th>Aksi</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -149,7 +179,7 @@ $role = $_SESSION['role'];
                     include 'koneksi.php';
 
                     $sql_pembayaran = "SELECT pembayaran.id, pembayaran.tanggal_pembayaran, pembayaran.jumlah, pembayaran.status,
-                                        reservasi.id AS id_reservasi, users.nama
+                                        pembayaran.bukti_pembayaran, reservasi.id AS id_reservasi, users.nama
                                         FROM pembayaran
                                         JOIN reservasi ON pembayaran.id_reservasi = reservasi.id
                                         JOIN users ON reservasi.id_user = users.id";
@@ -168,17 +198,37 @@ $role = $_SESSION['role'];
                                 <td>
                                     <?php if ($row['status'] == 'sukses'): ?>
                                         <span class="badge badge-success"><?= htmlspecialchars($row['status']) ?></span>
+                                    <?php elseif ($row['status'] == 'pending'): ?>
+                                        <span class="badge badge-warning"><?= htmlspecialchars($row['status']) ?></span>
                                     <?php else: ?>
                                         <span class="badge badge-danger"><?= htmlspecialchars($row['status']) ?></span>
                                     <?php endif; ?>
                                 </td>
+                                <td>
+                                    <?php if ($row['bukti_pembayaran']): ?>
+                                        <img src="assets/bukti_pembayaran/<?= htmlspecialchars($row['bukti_pembayaran']) ?>" class="bukti-img" alt="Bukti Pembayaran">
+                                    <?php else: ?>
+                                        <span>Belum ada bukti</span>
+                                    <?php endif; ?>
+                                </td>
+                                <?php if ($is_admin): ?>
+                                    <td>
+                                        <?php if ($row['status'] == 'pending' && $row['bukti_pembayaran']): ?>
+                                            <form action="update_status_pembayaran.php" method="POST">
+                                                <input type="hidden" name="id_pembayaran" value="<?= $row['id'] ?>">
+                                                <input type="hidden" name="id_reservasi" value="<?= $row['id_reservasi'] ?>">
+                                                <button type="submit" class="btn-success">Tandai Sukses</button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                     <?php
                         endwhile;
                     else:
                     ?>
                         <tr>
-                            <td colspan="6" class="no-data">Tidak ada data pembayaran tersedia.</td>
+                            <td colspan="8" class="no-data">Tidak ada data pembayaran tersedia.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

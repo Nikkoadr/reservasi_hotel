@@ -167,7 +167,7 @@ $role = $_SESSION['role'];
                                 <td><?= htmlspecialchars($row['tanggal_check_out']) ?></td>
                                 <td>Rp<?= number_format($row['total_pembayaran'], 2, ',', '.') ?></td>
                                 <td>
-                                    <?php if ($row['status'] == 'aktif'): ?>
+                                    <?php if ($row['status'] == 'booked'): ?>
                                         <span class="badge badge-success"><?= htmlspecialchars($row['status']) ?></span>
                                     <?php else: ?>
                                         <span class="badge badge-danger"><?= htmlspecialchars($row['status']) ?></span>

@@ -47,8 +47,8 @@ CREATE TABLE pembayaran (
 
 -- Menyisipkan data pengguna dengan password terenkripsi
 INSERT INTO users (nama, email, password, role) VALUES
-('Admin', 'admin@gmail.com', SHA2('admin123', 256), 'admin'),
-('Resepsionis', 'resepsionis@gmail.com', SHA2('resepsionis123', 256), 'resepsionis');
+('Admin', 'admin@gmail.com', 'admin123', 'admin'),
+('Resepsionis', 'resepsionis@gmail.com', 'resepsionis123', 'resepsionis');
 
 -- Menyisipkan data kamar
 INSERT INTO kamar (nomor_kamar, tipe, harga, deskripsi, status) VALUES
