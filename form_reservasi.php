@@ -96,16 +96,6 @@ if (!$kamar) {
             <label for="harga">Harga per Malam</label>
             <input type="text" id="harga" value="Rp<?= number_format($kamar['harga'], 0, ',', '.') ?>" disabled>
 
-            <!-- Data Tamu -->
-            <label for="nama">Nama</label>
-            <input type="text" name="nama" id="nama" placeholder="Masukkan nama Anda" required>
-
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" placeholder="Masukkan email Anda" required>
-
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" placeholder="Masukkan password untuk akun Anda" required>
-
             <!-- Data Reservasi -->
             <label for="tanggal_check_in">Tanggal Check-in</label>
             <input type="date" name="tanggal_check_in" id="tanggal_check_in" required>

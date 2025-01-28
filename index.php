@@ -134,7 +134,7 @@ $result = $conn->query($sql);
                             <p><strong>Tipe:</strong> <?= htmlspecialchars($row['tipe']) ?></p>
                             <p><strong>Harga:</strong> Rp<?= number_format($row['harga'], 0, ',', '.') ?></p>
                             <p><strong>Deskripsi:</strong> <?= htmlspecialchars($row['deskripsi']) ?></p>
-                            <a href="form_reservasi.php?id=<?= $row['id'] ?>" class="btn">Pesan Sekarang</a>
+                            <a href="registrasi.php" class="btn">Pesan Sekarang</a>
                         </div>
                     <?php endwhile; ?>
                 </div>

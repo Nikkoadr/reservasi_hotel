@@ -14,7 +14,7 @@ $nama = $_SESSION['nama'];
 $role = $_SESSION['role'];
 
 // Cek jika user adalah admin
-$is_admin = ($role == 'admin');
+$is_admin = ($role == 'admin' || $role == 'resepsionis');
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -149,6 +149,30 @@ $is_admin = ($role == 'admin');
         .btn-success:hover {
             background-color: #218838;
         }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
     </style>
 </head>
 <body>
@@ -179,7 +203,8 @@ $is_admin = ($role == 'admin');
                     include 'koneksi.php';
 
                     $sql_pembayaran = "SELECT pembayaran.id, pembayaran.tanggal_pembayaran, pembayaran.jumlah, pembayaran.status,
-                                        pembayaran.bukti_pembayaran, reservasi.id AS id_reservasi, users.nama
+                                        pembayaran.bukti_pembayaran, reservasi.id AS id_reservasi, reservasi.status AS status_reservasi, 
+                                        reservasi.id_kamar, users.nama
                                         FROM pembayaran
                                         JOIN reservasi ON pembayaran.id_reservasi = reservasi.id
                                         JOIN users ON reservasi.id_user = users.id";
@@ -196,11 +221,15 @@ $is_admin = ($role == 'admin');
                                 <td><?= htmlspecialchars($row['tanggal_pembayaran']) ?></td>
                                 <td>Rp<?= number_format($row['jumlah'], 2, ',', '.') ?></td>
                                 <td>
-                                    <?php if ($row['status'] == 'sukses'): ?>
+                                    <?php if ($row['status'] == 'belum dibayar'): ?>
+                                        <span class="badge badge-danger"><?= htmlspecialchars($row['status']) ?></span>
+                                    <?php elseif ($row['status'] == 'sukses'): ?>
                                         <span class="badge badge-success"><?= htmlspecialchars($row['status']) ?></span>
                                     <?php elseif ($row['status'] == 'pending'): ?>
                                         <span class="badge badge-warning"><?= htmlspecialchars($row['status']) ?></span>
-                                    <?php else: ?>
+                                    <?php elseif ($row['status'] == 'batal'): ?>
+                                        <span class="badge badge-danger"><?= htmlspecialchars($row['status']) ?></span>
+                                    <?php elseif ($row['status'] == 'dibatalkan'): ?>
                                         <span class="badge badge-danger"><?= htmlspecialchars($row['status']) ?></span>
                                     <?php endif; ?>
                                 </td>
@@ -213,11 +242,18 @@ $is_admin = ($role == 'admin');
                                 </td>
                                 <?php if ($is_admin): ?>
                                     <td>
-                                        <?php if ($row['status'] == 'pending' && $row['bukti_pembayaran']): ?>
+                                        <?php if ($row['status'] == 'pending'): ?>
                                             <form action="update_status_pembayaran.php" method="POST">
                                                 <input type="hidden" name="id_pembayaran" value="<?= $row['id'] ?>">
                                                 <input type="hidden" name="id_reservasi" value="<?= $row['id_reservasi'] ?>">
                                                 <button type="submit" class="btn-success">Tandai Sukses</button>
+                                            </form>
+                                        <?php elseif ($row['status'] == 'batal'): ?>
+                                            <form action="konfirmasi_batal.php" method="POST">
+                                                <input type="hidden" name="id_pembayaran" value="<?= $row['id'] ?>">
+                                                <input type="hidden" name="id_reservasi" value="<?= $row['id_reservasi'] ?>">
+                                                <input type="hidden" name="id_kamar" value="<?= $row['id_kamar'] ?>">
+                                                <button type="submit" class="btn-danger">Tandai Dibatalkan</button>
                                             </form>
                                         <?php endif; ?>
                                     </td>
