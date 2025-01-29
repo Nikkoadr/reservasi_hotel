@@ -18,10 +18,10 @@ CREATE TABLE kamar (
     tipe VARCHAR(50) NOT NULL,
     harga DECIMAL(10,2) NOT NULL,
     deskripsi TEXT,
-    status ENUM('tersedia', 'terpesan') NOT NULL
+    status ENUM('tersedia', 'terpesan', 'dibersihkan') NOT NULL
 );
 
--- Tabel reservasi
+-- Tabel reservasi (dengan ON DELETE CASCADE)
 CREATE TABLE reservasi (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_kamar INT NOT NULL,
@@ -29,12 +29,12 @@ CREATE TABLE reservasi (
     tanggal_check_in DATE NOT NULL,
     tanggal_check_out DATE NOT NULL,
     total_pembayaran DECIMAL(10,2) NOT NULL,
-    status ENUM('pending', 'booked','batal') NOT NULL,
-    FOREIGN KEY (id_kamar) REFERENCES kamar(id),
-    FOREIGN KEY (id_user) REFERENCES users(id)
+    status ENUM('pending', 'booked', 'batal','check-in', 'check-out') NOT NULL,
+    FOREIGN KEY (id_kamar) REFERENCES kamar(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Tabel pembayaran
+-- Tabel pembayaran (dengan ON DELETE CASCADE)
 CREATE TABLE pembayaran (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_reservasi INT NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE pembayaran (
     jumlah DECIMAL(10,2) NOT NULL,
     status ENUM('belum dibayar', 'pending', 'sukses', 'batal', 'dibatalkan') NOT NULL,
     bukti_pembayaran VARCHAR(255) NULL, 
-    FOREIGN KEY (id_reservasi) REFERENCES reservasi(id)
+    FOREIGN KEY (id_reservasi) REFERENCES reservasi(id) ON DELETE CASCADE
 );
 
 -- Menyisipkan data pengguna dengan password terenkripsi

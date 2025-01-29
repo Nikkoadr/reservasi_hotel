@@ -256,6 +256,11 @@ $is_admin = ($role == 'admin' || $role == 'resepsionis');
                                                 <button type="submit" class="btn-danger">Tandai Dibatalkan</button>
                                             </form>
                                         <?php endif; ?>
+
+                                        <form action="hapus_pembayaran.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pembayaran ini?');">
+                                            <input type="hidden" name="id_pembayaran" value="<?= $row['id'] ?>">
+                                            <button type="submit" class="btn-danger">Hapus</button>
+                                        </form>
                                     </td>
                                 <?php endif; ?>
                             </tr>

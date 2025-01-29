@@ -143,20 +143,19 @@ $role = $_SESSION['role'];
                         <th>Tanggal Check-out</th>
                         <th>Total Pembayaran</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     include 'koneksi.php';
 
-$sql_reservasi = "SELECT reservasi.id, reservasi.tanggal_check_in, reservasi.tanggal_check_out, reservasi.total_pembayaran, reservasi.status, 
-                        kamar.nomor_kamar, users.nama
-                FROM reservasi
-                JOIN kamar ON reservasi.id_kamar = kamar.id
-                JOIN users ON reservasi.id_user = users.id";
-$result_reservasi = $conn->query($sql_reservasi);
-
-
+                    $sql_reservasi = "SELECT reservasi.id, reservasi.tanggal_check_in, reservasi.tanggal_check_out, reservasi.total_pembayaran, reservasi.status, 
+                                            kamar.nomor_kamar, users.nama
+                                    FROM reservasi
+                                    JOIN kamar ON reservasi.id_kamar = kamar.id
+                                    JOIN users ON reservasi.id_user = users.id";
+                    $result_reservasi = $conn->query($sql_reservasi);
                     if ($result_reservasi->num_rows > 0):
                         $no = 1;
                         while ($row = $result_reservasi->fetch_assoc()):
@@ -175,6 +174,23 @@ $result_reservasi = $conn->query($sql_reservasi);
                                         <span class="badge badge-danger"><?= htmlspecialchars($row['status']) ?></span>
                                     <?php endif; ?>
                                 </td>
+                                <td>
+                                    <form action="edit_reservasi.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="id_reservasi" value="<?= $row['id'] ?>">
+                                        <select name="status">
+                                            <option value="batal" <?= $row['status'] == 'batal' ? 'selected' : '' ?>>batal</option>
+                                            <option value="booked" <?= $row['status'] == 'booked' ? 'selected' : '' ?>>Booked</option>
+                                            <option value="check-in" <?= $row['status'] == 'check-in' ? 'selected' : '' ?>>Check-in</option>
+                                            <option value="check-out" <?= $row['status'] == 'check-out' ? 'selected' : '' ?>>Check-out</option>
+                                        </select>
+                                        <button type="submit" class="btn-success">Update</button>
+                                    </form>
+
+                                    <form action="hapus_reservasi.php" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus reservasi ini?');">
+                                        <input type="hidden" name="id_reservasi" value="<?= $row['id'] ?>">
+                                        <button type="submit" class="btn-danger">Hapus</button>
+                                    </form>
+                            </td>
                             </tr>
                     <?php
                         endwhile;
