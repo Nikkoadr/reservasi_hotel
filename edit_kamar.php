@@ -2,21 +2,18 @@
 session_start();
 include 'koneksi.php';
 
-// Cek jika user belum login
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
 }
 
-// Cek apakah parameter id tersedia
 if (!isset($_GET['id'])) {
     header("Location: data_kamar.php");
     exit;
 }
 
-$id_kamar = intval($_GET['id']); // Validasi ID
+$id_kamar = intval($_GET['id']);
 
-// Query untuk mendapatkan data kamar
 $sql_kamar = "SELECT * FROM kamar WHERE id = ?";
 $stmt = $conn->prepare($sql_kamar);
 $stmt->bind_param("i", $id_kamar);
@@ -24,7 +21,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-    // Jika data tidak ditemukan, redirect
     header("Location: data_kamar.php");
     exit;
 }
@@ -38,7 +34,6 @@ $kamar = $result->fetch_assoc();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Kamar</title>
     <style>
-        /* CSS untuk form edit */
         .form-container {
             max-width: 600px;
             margin: 20px auto;

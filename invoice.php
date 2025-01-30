@@ -2,17 +2,14 @@
 session_start();
 include 'koneksi.php';
 
-// Pastikan user sudah login
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
 }
 
-// Ambil ID reservasi dari URL
 if (isset($_GET['id_reservasi'])) {
     $id_reservasi = $_GET['id_reservasi'];
 
-    // Ambil data reservasi beserta kamar dan pembayaran terkait
     $query = mysqli_query($conn, "SELECT 
                                     r.id AS reservasi_id, 
                                     u.nama AS nama_pemesan, 

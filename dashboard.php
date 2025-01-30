@@ -23,9 +23,7 @@ if ($role === 'tamu') {
     ");
     $pembayaran = mysqli_fetch_assoc($query_pembayaran);
     
-    // Check if there is no booking or reservation is canceled
     if (!$pembayaran || $pembayaran['status_reservasi'] === 'dibatalkan') {
-        // Query available rooms
         $query_kamar = mysqli_query($conn, "
             SELECT * FROM kamar
             WHERE status = 'tersedia'

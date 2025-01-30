@@ -11,13 +11,11 @@ $result = $conn->query($sql);
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Kamar Tersedia</title>
         <style>
-            /* Reset */
             body {
                 margin: 0;
                 font-family: Arial, sans-serif;
             }
 
-            /* Navbar */
             .navbar {
                 background-color: #007bff;
                 color: white;
@@ -55,7 +53,6 @@ $result = $conn->query($sql);
                 border-radius: 5px;
             }
 
-            /* Container */
             .container {
                 margin: 20px auto;
                 max-width: 900px;
@@ -68,7 +65,6 @@ $result = $conn->query($sql);
                 margin-bottom: 20px;
             }
 
-            /* Kamar List */
             .kamar-list {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -115,7 +111,6 @@ $result = $conn->query($sql);
     </head>
     <body>
             <div class="container">
-        <!-- Navbar -->
         <nav class="navbar">
             <a href="index.php" class="logo">Cluckin' Bell Hotel</a>
             <ul class="nav-links">
@@ -124,7 +119,6 @@ $result = $conn->query($sql);
             </ul>
         </nav>
 
-        <!-- Konten -->
             <h1>Daftar Kamar Tersedia</h1>
             <?php if ($result->num_rows > 0): ?>
                 <div class="kamar-list">

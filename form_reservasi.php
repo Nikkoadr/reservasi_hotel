@@ -85,7 +85,6 @@ if (!$kamar) {
     <div class="container">
         <h1>Form Reservasi</h1>
         <form action="proses_reservasi.php" method="POST">
-            <!-- Data Kamar -->
             <input type="hidden" name="id_kamar" value="<?= htmlspecialchars($kamar['id']) ?>">
             <label for="nomor_kamar">Nomor Kamar</label>
             <input type="text" id="nomor_kamar" value="<?= htmlspecialchars($kamar['nomor_kamar']) ?>" disabled>
@@ -96,7 +95,6 @@ if (!$kamar) {
             <label for="harga">Harga per Malam</label>
             <input type="text" id="harga" value="Rp<?= number_format($kamar['harga'], 0, ',', '.') ?>" disabled>
 
-            <!-- Data Reservasi -->
             <label for="tanggal_check_in">Tanggal Check-in</label>
             <input type="date" name="tanggal_check_in" id="tanggal_check_in" required>
 

@@ -30,13 +30,11 @@ $total_tahunan = $conn->query($sql_tahunan)->fetch_assoc()['total'] ?? 0;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Laporan</title>
     <style>
-        /* Reset */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
         }
 
-        /* Navbar */
         .navbar {
             background-color: #007bff;
             color: white;
@@ -45,7 +43,6 @@ $total_tahunan = $conn->query($sql_tahunan)->fetch_assoc()['total'] ?? 0;
             padding: 10px 20px;
             align-items: center;
         }
-
         .navbar .navbar-brand {
             font-size: 1.5em;
             font-weight: bold;
@@ -77,14 +74,12 @@ $total_tahunan = $conn->query($sql_tahunan)->fetch_assoc()['total'] ?? 0;
             border-radius: 5px;
         }
 
-        /* Container */
         .container {
             margin: 20px auto;
             max-width: 1200px;
             padding: 20px;
         }
 
-        /* Table */
         .table {
             width: 100%;
             border-collapse: collapse;

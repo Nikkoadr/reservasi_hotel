@@ -2,18 +2,15 @@
 session_start();
 include 'koneksi.php';
 
-// Cek jika user belum login
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
 }
 
-// Ambil informasi pengguna dari session
 $id_user = $_SESSION['id_user'];
 $nama = $_SESSION['nama'];
 $role = $_SESSION['role'];
 
-// Cek jika user adalah admin
 $is_admin = ($role == 'admin' || $role == 'resepsionis');
 ?>
 <!DOCTYPE html>
@@ -23,13 +20,11 @@ $is_admin = ($role == 'admin' || $role == 'resepsionis');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Pembayaran</title>
     <style>
-        /* Reset */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
         }
 
-        /* Navbar */
         .navbar {
             background-color: #007bff;
             color: white;
@@ -38,7 +33,6 @@ $is_admin = ($role == 'admin' || $role == 'resepsionis');
             padding: 10px 20px;
             align-items: center;
         }
-
         .navbar .navbar-brand {
             font-size: 1.5em;
             font-weight: bold;
@@ -63,21 +57,17 @@ $is_admin = ($role == 'admin' || $role == 'resepsionis');
             padding: 5px 10px;
             transition: background 0.3s ease;
         }
-
         .navbar-links a:hover,
         .navbar-links .logout-btn {
             background-color: #0056b3;
             border-radius: 5px;
         }
-
-        /* Container */
         .container {
             margin: 20px auto;
             max-width: 1200px;
             padding: 20px;
         }
 
-        /* Table */
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -110,8 +100,6 @@ $is_admin = ($role == 'admin' || $role == 'resepsionis');
             font-size: 1em;
             color: #888;
         }
-
-        /* Badge */
         .badge {
             padding: 5px 10px;
             border-radius: 5px;
@@ -130,14 +118,11 @@ $is_admin = ($role == 'admin' || $role == 'resepsionis');
         .badge-warning {
             background-color: rgb(218, 204, 22);
         }
-
-        /* Image styling */
         .bukti-img {
             max-width: 100px;
             height: auto;
         }
 
-        /* Button styling */
         .btn-success {
             background-color: #28a745;
             color: white;

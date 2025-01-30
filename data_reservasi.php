@@ -2,13 +2,11 @@
 session_start();
 include 'koneksi.php';
 
-// Cek jika user belum login
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
 }
 
-// Ambil informasi pengguna dari session
 $id_user = $_SESSION['id_user'];
 $nama = $_SESSION['nama'];
 $role = $_SESSION['role'];
@@ -20,13 +18,11 @@ $role = $_SESSION['role'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Reservasi</title>
     <style>
-        /* Reset */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
         }
 
-        /* Navbar */
         .navbar {
             background-color: #007bff;
             color: white;
@@ -67,14 +63,12 @@ $role = $_SESSION['role'];
             border-radius: 5px;
         }
 
-        /* Container */
         .container {
             margin: 20px auto;
             max-width: 1200px;
             padding: 20px;
         }
 
-        /* Table */
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -107,8 +101,6 @@ $role = $_SESSION['role'];
             font-size: 1em;
             color: #888;
         }
-
-        /* Badge */
         .badge {
             padding: 5px 10px;
             border-radius: 5px;

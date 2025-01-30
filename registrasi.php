@@ -76,7 +76,6 @@
     <div class="container">
         <h1>Registrasi Akun</h1>
 
-        <!-- Form Registrasi -->
         <form action="proses_registrasi.php" method="POST">
             <div class="form-group">
                 <label for="nama">Nama</label>

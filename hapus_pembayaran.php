@@ -23,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_pembayaran'])) {
     $stmt->close();
     $conn->close();
     
-    // Redirect kembali ke halaman data pembayaran
     header("Location: data_pembayaran.php");
     exit;
 } else {

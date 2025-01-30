@@ -15,7 +15,6 @@ if (!isset($_GET['id_pembayaran'])) {
 $id_pembayaran = $_GET['id_pembayaran'];
 $id_user = $_SESSION['id_user'];
 
-// Validasi pembayaran milik user tanpa memeriksa status
 $query_validasi = mysqli_query($conn, "
     SELECT pembayaran.id
     FROM pembayaran
@@ -28,7 +27,6 @@ if (mysqli_num_rows($query_validasi) === 0) {
     exit;
 }
 
-// Update status pembayaran menjadi batal
 $update_pembayaran = mysqli_query($conn, "
     UPDATE pembayaran SET status = 'batal' WHERE id = $id_pembayaran
 ");

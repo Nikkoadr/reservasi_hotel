@@ -2,13 +2,11 @@
 session_start();
 include 'koneksi.php';
 
-// Cek jika user belum login
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
 }
 
-// Ambil informasi pengguna dari session
 $id_user = $_SESSION['id_user'];
 $nama = $_SESSION['nama'];
 $role = $_SESSION['role'];
@@ -20,224 +18,219 @@ $role = $_SESSION['role'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Kamar</title>
     <style>
-/* Reset */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
+        body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+        }
 
-/* Navbar */
-.navbar {
-    background-color: #007bff;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-}
 
-.navbar-brand a {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-}
+        .navbar {
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
 
-.navbar-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    margin: 0;
-    padding: 0;
-}
+        .navbar-brand a {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
 
-.navbar-links a {
-    color: white;
-    text-decoration: none;
-    font-size: 1em;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
+        .navbar-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
 
-.navbar-links a.active {
-    background-color: #0056b3;
-}
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
-.navbar-links a:hover {
-    background-color: #0056b3;
-}
+        .navbar-links a.active {
+            background-color: #0056b3;
+        }
 
-.logout-btn {
-    background-color: #dc3545;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.9em;
-}
+        .navbar-links a:hover {
+            background-color: #0056b3;
+        }
 
-.logout-btn:hover {
-    background-color: #a71d2a;
-}
+        .logout-btn {
+            background-color: #dc3545;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
 
-/* Container */
-.container {
-  margin: 20px auto;
-  max-width: 1200px;
-  padding: 20px;
-}
+        .logout-btn:hover {
+            background-color: #a71d2a;
+        }
 
-/* Table */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  text-align: left;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        .container {
+          margin: 20px auto;
+          max-width: 1200px;
+          padding: 20px;
+        }
 
-.table thead {
-  background-color: #007bff;
-  color: white;
-}
+        .table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+          text-align: left;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-.table th,
-.table td {
-  padding: 12px;
-  border: 1px solid #ddd;
-}
+        .table thead {
+          background-color: #007bff;
+          color: white;
+        }
 
-.table tbody tr:nth-child(odd) {
-  background-color: #f9f9f9;
-}
+        .table th,
+        .table td {
+          padding: 12px;
+          border: 1px solid #ddd;
+        }
 
-.table tbody tr:hover {
-  background-color: #f1f1f1;
-}
+        .table tbody tr:nth-child(odd) {
+          background-color: #f9f9f9;
+        }
 
-.no-data {
-  text-align: center;
-  font-size: 1em;
-  color: #888;
-}
+        .table tbody tr:hover {
+          background-color: #f1f1f1;
+        }
 
-/* Badge */
-.badge {
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: white;
-  font-size: 0.9em;
-}
+        .no-data {
+          text-align: center;
+          font-size: 1em;
+          color: #888;
+        }
 
-.badge-success {
-  background-color: #28a745;
-}
+        .badge {
+          padding: 5px 10px;
+          border-radius: 5px;
+          color: white;
+          font-size: 0.9em;
+        }
 
-.badge-warning {
-  background-color: #ffc107;
-  color: black;
-}
+        .badge-success {
+          background-color: #28a745;
+        }
 
-.badge-danger {
-  background-color: #dc3545;
-}
+        .badge-warning {
+          background-color: #ffc107;
+          color: black;
+        }
 
-/* Button */
-.btn {
-  padding: 5px 10px;
-  border: none;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: background 0.3s ease;
-}
+        .badge-danger {
+          background-color: #dc3545;
+        }
 
-.btn-edit {
-  background-color: #007bff;
-}
+        .btn {
+          padding: 5px 10px;
+          border: none;
+          color: white;
+          text-decoration: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 0.9em;
+          transition: background 0.3s ease;
+        }
 
-.btn-edit:hover {
-  background-color: #0056b3;
-}
+        .btn-edit {
+          background-color: #007bff;
+        }
 
-.btn-delete {
-  background-color: #dc3545;
-}
+        .btn-edit:hover {
+          background-color: #0056b3;
+        }
 
-.btn-delete:hover {
-  background-color: #a71d2a;
-}
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        .btn-delete {
+          background-color: #dc3545;
+        }
 
-form label {
-  font-size: 1em;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
+        .btn-delete:hover {
+          background-color: #a71d2a;
+        }
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+          max-width: 600px;
+          margin: 20px auto;
+          padding: 20px;
+          background-color: #f9f9f9;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-form input[type="text"],
-form input[type="number"],
-form textarea,
-form select {
-  width: 100%;
-  padding: 10px;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
+        form label {
+          font-size: 1em;
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
 
-form textarea {
-  resize: vertical;
-}
+        form input[type="text"],
+        form input[type="number"],
+        form textarea,
+        form select {
+          width: 100%;
+          padding: 10px;
+          font-size: 1em;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          box-sizing: border-box;
+        }
 
-form button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 1em;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+        form textarea {
+          resize: vertical;
+        }
 
-form button:hover {
-  background-color: #0056b3;
-}
+        form button {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          padding: 10px 15px;
+          font-size: 1em;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
 
-form .btn-back {
-  background-color: #6c757d;
-  text-decoration: none;
-  display: inline-block;
-  padding: 10px 15px;
-  color: white;
-  font-size: 1em;
-  border-radius: 5px;
-  margin-bottom: 15px;
-  transition: background-color 0.3s ease;
-}
+        form button:hover {
+          background-color: #0056b3;
+        }
 
-form .btn-back:hover {
-  background-color: #5a6268;
-}
+        form .btn-back {
+          background-color: #6c757d;
+          text-decoration: none;
+          display: inline-block;
+          padding: 10px 15px;
+          color: white;
+          font-size: 1em;
+          border-radius: 5px;
+          margin-bottom: 15px;
+          transition: background-color 0.3s ease;
+        }
 
-form .error {
-  color: #dc3545;
-  font-size: 0.9em;
-  margin-top: -10px;
-}
+        form .btn-back:hover {
+          background-color: #5a6268;
+        }
+
+        form .error {
+          color: #dc3545;
+          font-size: 0.9em;
+          margin-top: -10px;
+        }
     </style>
 </head>
 <body>
