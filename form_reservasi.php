@@ -1,5 +1,15 @@
 <?php
+session_start();
 include 'koneksi.php';
+
+if (!isset($_SESSION['id_user'])) {
+    header("Location: login.php");
+    exit;
+}
+
+$id_user = $_SESSION['id_user'];
+$nama = $_SESSION['nama'];
+$role = $_SESSION['role'];
 
 $id_kamar = $_GET['id'] ?? null;
 if (!$id_kamar) {
@@ -26,84 +36,52 @@ if (!$kamar) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Reservasi</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin: 10px 0 5px;
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1>Form Reservasi</h1>
-        <form action="proses_reservasi.php" method="POST">
-            <input type="hidden" name="id_kamar" value="<?= htmlspecialchars($kamar['id']) ?>">
-            <label for="nomor_kamar">Nomor Kamar</label>
-            <input type="text" id="nomor_kamar" value="<?= htmlspecialchars($kamar['nomor_kamar']) ?>" disabled>
+<body class="bg-light">
 
-            <label for="tipe">Tipe Kamar</label>
-            <input type="text" id="tipe" value="<?= htmlspecialchars($kamar['tipe']) ?>" disabled>
+    <div class="container mt-4">
+        <?php include 'navbar.php'; ?>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h1 class="text-center text-primary mb-4">Form Reservasi</h1>
 
-            <label for="harga">Harga per Malam</label>
-            <input type="text" id="harga" value="Rp<?= number_format($kamar['harga'], 0, ',', '.') ?>" disabled>
+                <form action="proses_reservasi.php" method="POST">
+                    <input type="hidden" name="id_kamar" value="<?= htmlspecialchars($kamar['id']) ?>">
 
-            <label for="tanggal_check_in">Tanggal Check-in</label>
-            <input type="date" name="tanggal_check_in" id="tanggal_check_in" required>
+                    <div class="mb-3">
+                        <label for="nomor_kamar" class="form-label">Nomor Kamar</label>
+                        <input type="text" id="nomor_kamar" class="form-control" value="<?= htmlspecialchars($kamar['nomor_kamar']) ?>" disabled>
+                    </div>
 
-            <label for="tanggal_check_out">Tanggal Check-out</label>
-            <input type="date" name="tanggal_check_out" id="tanggal_check_out" required>
+                    <div class="mb-3">
+                        <label for="tipe" class="form-label">Tipe Kamar</label>
+                        <input type="text" id="tipe" class="form-control" value="<?= htmlspecialchars($kamar['tipe']) ?>" disabled>
+                    </div>
 
+                    <div class="mb-3">
+                        <label for="harga" class="form-label">Harga per Malam</label>
+                        <input type="text" id="harga" class="form-control" value="Rp<?= number_format($kamar['harga'], 0, ',', '.') ?>" disabled>
+                    </div>
 
-            <button type="submit" class="btn">Lanjutkan Reservasi</button>
-        </form>
+                    <div class="mb-3">
+                        <label for="tanggal_check_in" class="form-label">Tanggal Check-in</label>
+                        <input type="date" name="tanggal_check_in" id="tanggal_check_in" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tanggal_check_out" class="form-label">Tanggal Check-out</label>
+                        <input type="date" name="tanggal_check_out" id="tanggal_check_out" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Lanjutkan Reservasi</button>
+                </form>
+            </div>
+        </div>
     </div>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

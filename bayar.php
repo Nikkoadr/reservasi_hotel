@@ -65,72 +65,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pembayaran Reservasi</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            margin: 20px auto;
-            max-width: 800px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .alert {
-            padding: 15px;
-            background-color: #ffc107;
-            color: black;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
-        .alert-danger {
-            background-color: #dc3545;
-            color: white;
-        }
-        .btn {
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
 
-<div class="container">
-    <h1>Pembayaran Reservasi</h1>
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="text-center text-primary mb-4">Pembayaran Reservasi</h1>
 
-    <?php if (isset($error_message)): ?>
-        <div class="alert alert-danger"><?= $error_message ?></div>
-    <?php endif; ?>
+            <?php if (isset($error_message)): ?>
+                <div class="alert alert-danger"><?= $error_message ?></div>
+            <?php endif; ?>
 
-    <p><strong>Detail Pembayaran:</strong></p>
-    <ul>
-        <li>Check-in: <?= $pembayaran['tanggal_check_in'] ?></li>
-        <li>Check-out: <?= $pembayaran['tanggal_check_out'] ?></li>
-        <li>Total Pembayaran: Rp<?= number_format($pembayaran['jumlah'], 0, ',', '.') ?></li>
-    </ul>
+            <p><strong>Detail Pembayaran:</strong></p>
+            <ul class="list-group mb-4">
+                <li class="list-group-item"><strong>Check-in:</strong> <?= $pembayaran['tanggal_check_in'] ?></li>
+                <li class="list-group-item"><strong>Check-out:</strong> <?= $pembayaran['tanggal_check_out'] ?></li>
+                <li class="list-group-item"><strong>Total Pembayaran:</strong> Rp<?= number_format($pembayaran['jumlah'], 0, ',', '.') ?></li>
+            </ul>
 
-    <form method="POST" enctype="multipart/form-data">
-        <label for="bank_tujuan">Transfer Ke BRI: 123-456-789-098-321 A/N Cluckin' Bell Hotel</label>
-        <br><br>
+            <form method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="bank_tujuan" class="form-label">Transfer Ke BRI: 123-456-789-098-321 A/N Cluckin' Bell Hotel</label>
+                </div>
 
-        <label for="bukti_pembayaran">Unggah Bukti Pembayaran: </label>
-        <input type="file" name="bukti_pembayaran" id="bukti_pembayaran" accept="image/*" required>
-        <br><br>
+                <div class="mb-3">
+                    <label for="bukti_pembayaran" class="form-label">Unggah Bukti Pembayaran:</label>
+                    <input type="file" name="bukti_pembayaran" id="bukti_pembayaran" class="form-control" accept="image/*" required>
+                </div>
 
-        <button type="submit" class="btn">Kirim bukti Transfer</button>
-        <a href="dashboard.php" class="btn">Kembali</a>
-    </form>
+                <button type="submit" class="btn btn-primary w-100">Kirim bukti Transfer</button>
+            </form>
+
+            <a href="dashboard.php" class="btn btn-secondary w-100 mt-3">Kembali</a>
+        </div>
+    </div>
 </div>
 
+<!-- Include Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

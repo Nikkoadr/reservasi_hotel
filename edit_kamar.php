@@ -7,6 +7,10 @@ if (!isset($_SESSION['id_user'])) {
     exit;
 }
 
+$id_user = $_SESSION['id_user'];
+$nama = $_SESSION['nama'];
+$role = $_SESSION['role'];
+
 if (!isset($_GET['id'])) {
     header("Location: data_kamar.php");
     exit;
@@ -33,86 +37,52 @@ $kamar = $result->fetch_assoc();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Kamar</title>
-    <style>
-        .form-container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .form-container label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .form-container input,
-        .form-container textarea,
-        .form-container select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-
-        .form-container button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .form-container button:hover {
-            background-color: #0056b3;
-        }
-
-        .form-container a {
-            text-decoration: none;
-            color: #007bff;
-            font-size: 0.9em;
-        }
-
-        .form-container a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="form-container">
-        <h1>Edit Kamar</h1>
-        <form action="update_kamar.php" method="POST">
-            <input type="hidden" name="id" value="<?= htmlspecialchars($kamar['id']) ?>">
 
-            <label for="nomor_kamar">Nomor Kamar</label>
-            <input type="text" id="nomor_kamar" name="nomor_kamar" value="<?= htmlspecialchars($kamar['nomor_kamar']) ?>" required>
+    <div class="container mt-4">
+        <?php include 'navbar.php'; ?>
+            <div class="form-container bg-light p-4 rounded shadow-sm">
+                <h1>Edit Kamar</h1>
+                <form action="update_kamar.php" method="POST">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($kamar['id']) ?>">
 
-            <label for="tipe">Tipe</label>
-            <input type="text" id="tipe" name="tipe" value="<?= htmlspecialchars($kamar['tipe']) ?>" required>
+                    <div class="mb-3">
+                        <label for="nomor_kamar" class="form-label">Nomor Kamar</label>
+                        <input type="text" id="nomor_kamar" name="nomor_kamar" class="form-control" value="<?= htmlspecialchars($kamar['nomor_kamar']) ?>" required>
+                    </div>
 
-            <label for="harga">Harga</label>
-            <input type="number" id="harga" name="harga" value="<?= htmlspecialchars($kamar['harga']) ?>" required step="0.01" min="0">
+                    <div class="mb-3">
+                        <label for="tipe" class="form-label">Tipe</label>
+                        <input type="text" id="tipe" name="tipe" class="form-control" value="<?= htmlspecialchars($kamar['tipe']) ?>" required>
+                    </div>
 
-            <label for="deskripsi">Deskripsi</label>
-            <textarea id="deskripsi" name="deskripsi" rows="4" required><?= htmlspecialchars($kamar['deskripsi']) ?></textarea>
+                    <div class="mb-3">
+                        <label for="harga" class="form-label">Harga</label>
+                        <input type="number" id="harga" name="harga" class="form-control" value="<?= htmlspecialchars($kamar['harga']) ?>" required step="0.01" min="0">
+                    </div>
 
-            <label for="status">Status</label>
-            <select id="status" name="status" required>
-                <option value="tersedia" <?= $kamar['status'] === 'tersedia' ? 'selected' : '' ?>>Tersedia</option>
-                <option value="dibersihkan" <?= $kamar['status'] === 'dibersihkan' ? 'selected' : '' ?>>Dibersihkan</option>
-                <option value="terpesan" <?= $kamar['status'] === 'terpesan' ? 'selected' : '' ?>>Terpesan</option>
-            </select>
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <textarea id="deskripsi" name="deskripsi" class="form-control" rows="4" required><?= htmlspecialchars($kamar['deskripsi']) ?></textarea>
+                    </div>
 
-            <button type="submit">Simpan Perubahan</button>
-        </form>
-        <a href="data_kamar.php">Kembali ke Data Kamar</a>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select id="status" name="status" class="form-select" required>
+                            <option value="tersedia" <?= $kamar['status'] === 'tersedia' ? 'selected' : '' ?>>Tersedia</option>
+                            <option value="dibersihkan" <?= $kamar['status'] === 'dibersihkan' ? 'selected' : '' ?>>Dibersihkan</option>
+                            <option value="terpesan" <?= $kamar['status'] === 'terpesan' ? 'selected' : '' ?>>Terpesan</option>
+                        </select>
+                    </div>
+
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <a href="data_kamar.php" class="btn btn-secondary">Kembali</a>
+                </form>
+            </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
