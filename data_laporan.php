@@ -2,16 +2,26 @@
 session_start();
 include 'koneksi.php';
 
-// Cek jika user belum login
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
 }
 
-// Ambil informasi pengguna dari session
 $id_user = $_SESSION['id_user'];
 $nama = $_SESSION['nama'];
 $role = $_SESSION['role'];
+
+$tanggal_hari_ini = date('Y-m-d');
+$tanggal_bulan_ini = date('Y-m');
+$tanggal_tahun_ini = date('Y');
+
+$sql_harian = "SELECT SUM(jumlah) AS total FROM pembayaran WHERE DATE(tanggal_pembayaran) = '$tanggal_hari_ini'";
+$sql_bulanan = "SELECT SUM(jumlah) AS total FROM pembayaran WHERE DATE_FORMAT(tanggal_pembayaran, '%Y-%m') = '$tanggal_bulan_ini'";
+$sql_tahunan = "SELECT SUM(jumlah) AS total FROM pembayaran WHERE YEAR(tanggal_pembayaran) = '$tanggal_tahun_ini'";
+
+$total_harian = $conn->query($sql_harian)->fetch_assoc()['total'] ?? 0;
+$total_bulanan = $conn->query($sql_bulanan)->fetch_assoc()['total'] ?? 0;
+$total_tahunan = $conn->query($sql_tahunan)->fetch_assoc()['total'] ?? 0;
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -107,81 +117,37 @@ $role = $_SESSION['role'];
             font-size: 1em;
             color: #888;
         }
-
-        /* Badge */
-        .badge {
-            padding: 5px 10px;
-            border-radius: 5px;
-            color: white;
-            font-size: 0.9em;
-        }
-
-        .badge-success {
-            background-color: #28a745;
-        }
-
-        .badge-danger {
-            background-color: #dc3545;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <?php
-        include 'navbar.php';
-        ?>
+        <?php include 'navbar.php'; ?>
         <div class="content">
-            <h1>Data Laporan Reservasi</h1>
+            <h1>Data Laporan Pembayaran</h1>
             <table class="table">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Nomor Kamar</th>
-                        <th>Nama Pengguna</th>
-                        <th>Tanggal Check-in</th>
-                        <th>Tanggal Check-out</th>
-                        <th>Total Pembayaran</th>
-                        <th>Status</th>
+                        <th>Periode</th>
+                        <th>Total Penghasilan</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    include 'koneksi.php';
-
-                    $sql_laporan = "SELECT reservasi.id, reservasi.tanggal_check_in, reservasi.tanggal_check_out, reservasi.total_pembayaran, reservasi.status, 
-                                    kamar.nomor_kamar, users.nama
-                                    FROM reservasi
-                                    JOIN kamar ON reservasi.id_kamar = kamar.id
-                                    JOIN users ON reservasi.id_user = users.id";
-                    $result_laporan = $conn->query($sql_laporan);
-
-                    if ($result_laporan->num_rows > 0):
-                        $no = 1;
-                        while ($row = $result_laporan->fetch_assoc()):
-                    ?>
-                            <tr>
-                                <td><?= $no++ ?></td>
-                                <td><?= htmlspecialchars($row['nomor_kamar']) ?></td>
-                                <td><?= htmlspecialchars($row['nama']) ?></td>
-                                <td><?= htmlspecialchars($row['tanggal_check_in']) ?></td>
-                                <td><?= htmlspecialchars($row['tanggal_check_out']) ?></td>
-                                <td>Rp<?= number_format($row['total_pembayaran'], 2, ',', '.') ?></td>
-                                <td>
-                                    <?php if ($row['status'] == 'booked'): ?>
-                                        <span class="badge badge-success"><?= htmlspecialchars($row['status']) ?></span>
-                                    <?php else: ?>
-                                        <span class="badge badge-danger"><?= htmlspecialchars($row['status']) ?></span>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                    <?php
-                        endwhile;
-                    else:
-                    ?>
-                        <tr>
-                            <td colspan="7" class="no-data">Tidak ada data laporan reservasi tersedia.</td>
-                        </tr>
-                    <?php endif; ?>
+                    <tr>
+                        <td>1</td>
+                        <td>Hari Ini (<?= date('d-m-Y') ?>)</td>
+                        <td>Rp<?= number_format($total_harian, 2, ',', '.') ?></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Bulan Ini (<?= date('F Y') ?>)</td>
+                        <td>Rp<?= number_format($total_bulanan, 2, ',', '.') ?></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Tahun Ini (<?= date('Y') ?>)</td>
+                        <td>Rp<?= number_format($total_tahunan, 2, ',', '.') ?></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
