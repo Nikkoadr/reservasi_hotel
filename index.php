@@ -1,5 +1,6 @@
 <?php
 include 'koneksi.php';
+
 $sql = "SELECT * FROM kamar WHERE status = 'tersedia'";
 $result = $conn->query($sql);
 ?>

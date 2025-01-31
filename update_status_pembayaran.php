@@ -1,5 +1,11 @@
 <?php
+session_start();
 include 'koneksi.php';
+
+if (!isset($_SESSION['id_user'])) {
+    header("Location: login.php");
+    exit;
+}
 
 if (isset($_POST['id_pembayaran']) && isset($_POST['id_reservasi'])) {
     $id_pembayaran = $_POST['id_pembayaran'];

@@ -33,7 +33,7 @@ $update_pembayaran = mysqli_query($conn, "
 
 if ($update_pembayaran) {
     echo "<script>
-        alert('Pembayaran berhasil dibatalkan.');
+        alert('Pembayaran berhasil dibatalkan.jika ada transaksi tim kami akan merefund secepatnya');
         window.location.href = 'dashboard.php';
     </script>";
 } else {

@@ -1,4 +1,4 @@
--- Database: reservasi_hotel
+
 CREATE DATABASE IF NOT EXISTS reservasi_hotel;
 USE reservasi_hotel;
 
@@ -11,7 +11,7 @@ CREATE TABLE users (
     role ENUM('admin', 'resepsionis', 'tamu') NOT NULL
 );
 
--- Tabel kamar
+
 CREATE TABLE kamar (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nomor_kamar VARCHAR(10) NOT NULL UNIQUE,
@@ -21,7 +21,6 @@ CREATE TABLE kamar (
     status ENUM('tersedia', 'terpesan', 'dibersihkan') NOT NULL
 );
 
--- Tabel reservasi (dengan ON DELETE CASCADE)
 CREATE TABLE reservasi (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_kamar INT NOT NULL,
@@ -34,7 +33,6 @@ CREATE TABLE reservasi (
     FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Tabel pembayaran (dengan ON DELETE CASCADE)
 CREATE TABLE pembayaran (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_reservasi INT NOT NULL,
@@ -45,12 +43,10 @@ CREATE TABLE pembayaran (
     FOREIGN KEY (id_reservasi) REFERENCES reservasi(id) ON DELETE CASCADE
 );
 
--- Menyisipkan data pengguna dengan password terenkripsi
 INSERT INTO users (nama, email, password, role) VALUES
 ('Admin', 'admin@gmail.com', 'admin123', 'admin'),
 ('Resepsionis', 'resepsionis@gmail.com', 'resepsionis123', 'resepsionis');
 
--- Menyisipkan data kamar
 INSERT INTO kamar (nomor_kamar, tipe, harga, deskripsi, status) VALUES
 ('101', 'Standard', 500000, 'Kamar standar dengan fasilitas dasar', 'tersedia'),
 ('102', 'Standard', 500000, 'Kamar standar dengan fasilitas dasar', 'tersedia'),

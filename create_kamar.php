@@ -1,6 +1,11 @@
 <?php
+session_start();
 include 'koneksi.php';
-// Proses tambah kamar
+
+if (!isset($_SESSION['id_user'])) {
+    header("Location: login.php");
+    exit;
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nomor_kamar = $_POST['nomor_kamar'];
     $tipe = $_POST['tipe'];

@@ -1,5 +1,11 @@
 <?php
+session_start();
 include 'koneksi.php';
+
+if (!isset($_SESSION['id_user'])) {
+    header("Location: login.php");
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id_reservasi = $_POST['id_reservasi'];

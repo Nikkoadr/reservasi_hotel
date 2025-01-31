@@ -15,9 +15,10 @@ $tanggal_hari_ini = date('Y-m-d');
 $tanggal_bulan_ini = date('Y-m');
 $tanggal_tahun_ini = date('Y');
 
-$sql_harian = "SELECT SUM(jumlah) AS total FROM pembayaran WHERE DATE(tanggal_pembayaran) = '$tanggal_hari_ini'";
-$sql_bulanan = "SELECT SUM(jumlah) AS total FROM pembayaran WHERE DATE_FORMAT(tanggal_pembayaran, '%Y-%m') = '$tanggal_bulan_ini'";
-$sql_tahunan = "SELECT SUM(jumlah) AS total FROM pembayaran WHERE YEAR(tanggal_pembayaran) = '$tanggal_tahun_ini'";
+$sql_harian = "SELECT SUM(jumlah) AS total FROM pembayaran WHERE DATE(tanggal_pembayaran) = '$tanggal_hari_ini' AND status = 'sukses'";
+$sql_bulanan = "SELECT SUM(jumlah) AS total FROM pembayaran WHERE DATE_FORMAT(tanggal_pembayaran, '%Y-%m') = '$tanggal_bulan_ini' AND status = 'sukses'";
+$sql_tahunan = "SELECT SUM(jumlah) AS total FROM pembayaran WHERE YEAR(tanggal_pembayaran) = '$tanggal_tahun_ini' AND status = 'sukses'";
+
 
 $total_harian = $conn->query($sql_harian)->fetch_assoc()['total'] ?? 0;
 $total_bulanan = $conn->query($sql_bulanan)->fetch_assoc()['total'] ?? 0;

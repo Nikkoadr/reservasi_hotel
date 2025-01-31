@@ -2,6 +2,11 @@
 session_start();
 include 'koneksi.php';
 
+if (!isset($_SESSION['id_user'])) {
+    header("Location: login.php");
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_kamar = $_POST['id_kamar'];
     $tanggal_check_in = $_POST['tanggal_check_in'];
