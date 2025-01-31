@@ -66,7 +66,7 @@ $role = $_SESSION['role'];
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <form action="edit_reservasi.php" method="POST" style="display:inline;">
+                                    <form action="update_reservasi.php" method="POST" style="display:inline;">
                                         <input type="hidden" name="id_reservasi" value="<?= $row['id'] ?>">
                                         <select name="status" class="form-select form-select-sm">
                                             <option value="batal" <?= $row['status'] == 'batal' ? 'selected' : '' ?>>Batal</option>

@@ -12,13 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
 
-        if ($password == $user['password']) {
+        // Verifikasi password dengan password_hash
+        if (password_verify($password, $user['password'])) {
             $_SESSION['id_user'] = $user['id'];
             $_SESSION['nama'] = $user['nama'];
             $_SESSION['role'] = $user['role'];
@@ -30,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $error = "Email tidak ditemukan!";
     }
+
+    $stmt->close();
 }
 ?>
 
